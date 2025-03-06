@@ -25,3 +25,45 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+.imc-container {
+    width: 400px;
+    margin: auto;
+    background-color: #e7f6f9;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form label {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.form input, .form select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button {
+    margin-top: 15px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+.resultado {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #e9f6ff;
+    border-radius: 5px;
+}
