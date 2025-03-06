@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora IMC</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="imc-container">
+        <h2>Calculadora de IMC</h2>
+
+        <div class="form">
+            <label for="sexo">Sexo:</label>
+            <select id="sexo">
+                <option value="hombre">Hombre</option>
+                <option value="mujer">Mujer</select>
+
+            <label for="unidades">Sistema de unidades:</label>
+            <select id="unidades">
+                <option value="metrico">Métrico (kg, cm)</option>
+                <option value="imperial">Imperial (lb, in)</option>
+            </select>
+
+            <label for="altura">Altura:</label>
+            <input type="number" id="altura" placeholder="cm o pulgadas" />
+
+            <label for="peso">Peso:</label>
+            <input type="number" id="peso" placeholder="kg o libras" />
+
+            <button onclick="calcularIMC()">Calcular IMC</button>
+        </div>
+
+        <div class="resultado" id="resultado">
+            <!-- Aquí aparecerán los resultados -->
+        </div>
+    </div>
+
+    <script src="imc.js"></script>
+</body>
+</html>
