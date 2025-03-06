@@ -1,73 +1,55 @@
-document.querySelector('#altura').addEventListener('input', calcularIMC);
-document.querySelector('#peso').addEventListener('input', calcularIMC);
-document.querySelector('#sexo').addEventListener('change', calcularIMC);
-document.querySelector('#sexo').addEventListener('change', calcularIMC);
-document.querySelector('#sexo').addEventListener('change', calcularIMC);
-document.querySelector('#sexo').addEventListener('change', calcularIMC);
-document.querySelector('#altura').addEventListener('input', calcularIMC);
-document.querySelector('#peso').addEventListener('input', calcularIMC);
-document.querySelector('#sexo').addEventListener('change', calcularIMC);
-document.querySelector('#altura').addEventListener('input', calcularIMC);
-document.querySelector('#peso').addEventListener('input', calcularIMC);
-document.querySelector('#sexo').addEventListener('change', calcularIMC);
-document.querySelector('#sexo').addEventListener('change', calcularIMC);
-document.querySelector('#altura').addEventListener('input', calcularIMC);
-document.querySelector('#peso').addEventListener('input', calcularIMC);
-document.querySelector('#sexo').addEventListener('change', calcularIMC);
-document.querySelector('#sexo').addEventListener('change', calcularIMC);
-document.querySelector('#altura').addEventListener('input', calcularIMC);
-document.querySelector('#peso').addEventListener('input', calcularIMC);
-document.querySelector('#sexo').addEventListener('change', calcularIMC);
-
 function calcularIMC() {
     const sexo = document.getElementById('sexo').value;
-    const unidades = document.getElementById('sexo').value;
-    const altura = parseFloat(document.getElementById('altura').value);
-    const peso = parseFloat(document.getElementById('peso').value);
-    const resultado = document.querySelector('.imc-container .form + div');
+    const unidades = document.getElementById('unidades').value;
+    let altura = parseFloat(document.getElementById('altura').value);
+    let peso = parseFloat(document.getElementById('peso').value);
+    const resultado = document.querySelector('.resultado');
 
-    if (!altura || !peso || altura <= 0 || peso <= 0) {
-        resultado.innerHTML = '';
+    if (!altura || !peso) {
+        resultado.innerHTML = "<p>Ingresa altura y peso válidos.</p>";
         return;
     }
 
-    let alturaMetros = altura;
-    let pesoKg = peso;
-
+    // Conversión a sistema métrico si es imperial
     if (unidades === 'imperial') {
-        alturaMetros = altura * 0.0254;  // pulgadas a metros
-        pesoKg = peso * 0.453592; // libras a kg
+        altura = altura * 0.0254;  // pulgadas a metros
+        peso = peso * 0.453592; // libras a kg
     } else {
-        alturaMetros = altura / 100;  // cm a metros
-        pesoKg = peso;
+        altura = altura / 100; // centímetros a metros
     }
 
-    const imc = pesoKg / (alturaMetros * alturaMetros);
-    const imcRedondeado = imc.toFixed(1);
-    let rango = '';
+    const imc = peso / (altura * altura);
+    let estado = '';
     let explicacion = '';
 
     if (imc < 18.5) {
         rango = 'Bajo peso';
-        explicacion = 'Tu peso está por debajo de lo recomendado.';
+        explicacion = 'Tu peso está por debajo del recomendado. Considera mejorar tu alimentación.';
     } else if (imc >= 18.5 && imc < 24.9) {
-        explicacion = 'Tu peso es saludable.';
+        rango = 'Peso saludable';
+        explicacion = '¡Excelente! Mantienes un peso saludable.';
     } else if (imc >= 25 && imc < 29.9) {
-        explicacion = 'Tienes sobrepeso.';
+        rango = 'Sobrepeso';
+        explicacion = 'Tienes algo de sobrepeso. Un poco de actividad física te ayudaría.';
     } else if (imc >= 30 && imc < 34.9) {
-        explicacion = 'Presentas obesidad tipo I (moderada).';
-    } else if (imc >= 30 && imc < 34.9) {
-        explicacion = 'Tienes obesidad grado 1.';
+        rango = 'Obesidad grado 1';
+        explicacion = 'Tienes obesidad grado 1. Considera asesoría nutricional.';
     } else if (imc >= 35 && imc < 39.9) {
-        explicacion = 'Tienes obesidad grado 2 (severa).';
+        rango = 'Obesidad grado 2';
+        explicacion = 'Obesidad grado 2 (severa). Te recomiendo consultar un especialista.';
     } else {
-        explicacion = 'Tienes obesidad grado 3 (mórbida).';
+        rango = 'Obesidad grado 3';
+        explicacion = 'Obesidad grado 3 (mórbida). Es importante que busques ayuda médica profesional.';
     }
 
-    resultado.innerHTML = `
-        <div class="resultado">
-            <h3>Tu IMC es: ${imc.toFixed(2)}</h3>
-            <p>${explicacion}</p>
-        </div>
+    document.querySelector('.resultado').innerHTML = `
+        <h3>Tu IMC es: ${imc.toFixed(2)}</h3>
+        <p><strong>Rango:</strong> ${rango}</p>
+        <p>${explicacion}</p>
     `;
 }
+
+// Eventos automáticos al cambiar valores
+document.querySelectorAll('#sexo, #unidades, #altura, #peso').forEach(input => {
+    input.addEventListener('input', calcularIMC);
+});
