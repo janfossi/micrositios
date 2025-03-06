@@ -7,32 +7,31 @@
 </head>
 <body>
     <div class="imc-container">
-        <h2>Calculadora de IMC</h2>
+        <h2>Calculadora IMC</h2>
 
         <div class="form">
             <label for="sexo">Sexo:</label>
             <select id="sexo">
                 <option value="hombre">Hombre</option>
-                <option value="mujer">Mujer</select>
+                <option value="mujer">Mujer</option>
+            </select>
 
-            <label for="unidades">Sistema de unidades:</label>
+            <label for="unidades">Unidades:</label>
             <select id="unidades">
                 <option value="metrico">Métrico (kg, cm)</option>
-                <option value="imperial">Imperial (lb, in)</option>
+                <option value="imperial">Imperial (libras, pulgadas)</option>
             </select>
 
             <label for="altura">Altura:</label>
-            <input type="number" id="altura" placeholder="cm o pulgadas" />
+            <input type="number" id="altura" placeholder="Introduce altura" />
 
             <label for="peso">Peso:</label>
-            <input type="number" id="peso" placeholder="kg o libras" />
+            <input type="number" id="peso" placeholder="Introduce peso" />
 
             <button onclick="calcularIMC()">Calcular IMC</button>
         </div>
 
-        <div class="resultado" id="resultado">
-            <!-- Aquí aparecerán los resultados -->
-        </div>
+        <div id="resultado" class="resultado"></div>
     </div>
 
     <script src="imc.js"></script>
