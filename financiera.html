@@ -29,8 +29,8 @@
             <input type="number" id="tasaIVA" value="19" min="0" max="25">
 
             <h3>Elige cómo quieres calcular:</h3>
-            <label><input type="radio" name="modo" value="margen" checked onchange="cambiarModo()"> Calcular Precio con Margen (%)</label>
-            <label><input type="radio" name="modo" value="precio"> Calcular Margen con Precio Final</label>
+            <label><input type="radio" name="modo" value="margen" checked onclick="cambiarModo()"> Calcular Precio con Margen (%)</label>
+            <label><input type="radio" name="modo" value="precio" onclick="cambiarModo()"> Calcular Margen con Precio Final</label>
 
             <div id="contenedorMargen">
                 <label for="margen">Margen deseado (%):</label>
@@ -51,3 +51,4 @@
     <script src="financiera.js"></script>
 </body>
 </html>
+
