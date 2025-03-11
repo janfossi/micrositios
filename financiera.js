@@ -1,3 +1,6 @@
+console.log("✅ financiera.js se ha cargado correctamente.");
+
+
 function formatoMoneda(valor) {
     return valor.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
 }
