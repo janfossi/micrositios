@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora Financiera (IVA y Margen)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="calculadora-container">
+        <h2>Calculadora Financiera (IVA y Margen)</h2>
+
+        <div class="form">
+            <label for="costoNeto">Costo Neto del Producto:</label>
+            <input type="number" id="costoNeto" placeholder="Ej. 10000">
+
+            <label>¿La compra lleva IVA (afecta)?</label>
+            <select id="compraIVA">
+                <option value="si">Sí, afecta (con IVA)</option>
+                <option value="no">No, exenta (sin IVA)</option>
+            </select>
+
+            <label>¿La venta lleva IVA?</label>
+            <select id="ventaIVA">
+                <option value="si">Sí, afecta (con IVA)</option>
+                <option value="no">No, exenta (sin IVA)</option>
+            </select>
+
+            <label for="tasaIVA">Tasa de IVA (%):</label>
+            <input type="number" id="tasaIVA" value="19" min="0" max="25">
+
+            <h3>Elige cómo quieres calcular:</h3>
+            <label><input type="radio" name="modo" value="margen" checked onchange="cambiarModo()"> Calcular Precio con Margen (%)</label>
+            <label><input type="radio" name="modo" value="precio"> Calcular Margen con Precio Final</label>
+
+            <div id="contenedorMargen">
+                <label for="margen">Margen deseado (%):</label>
+                <input type="number" id="margen" placeholder="Ej. 30">
+            </div>
+
+            <div id="contenedorPrecio" style="display:none;">
+                <label for="precioFinal">Precio final deseado:</label>
+                <input type="number" id="precioFinal" placeholder="Ej. 15000">
+            </div>
+
+            <button onclick="calcularResultado()">Calcular</button>
+
+            <div id="resultado" class="resultado"></div>
+        </div>
+    </div>
+
+    <script src="financiera.js"></script>
+</body>
+</html>
