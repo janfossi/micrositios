@@ -1,4 +1,5 @@
 console.log("✅ financiera.js se ha cargado correctamente.");
+alert("¡El script financiera.js se ha ejecutado!");
 
 
 function formatoMoneda(valor) {
