@@ -2,16 +2,21 @@ function formatoMoneda(valor) {
     return valor.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
 }
 
-document.querySelectorAll('input[name="modo"]').forEach(input => {
-    input.addEventListener('change', () => {
-        const modo = document.querySelector('input[name="modo"]:checked').value;
-        document.getElementById('margen').disabled = (modo === 'precio');
-        document.getElementById('precioFinal').disabled = (modo === 'margen');
-    });
-});
+// Función para cambiar el modo entre "margen" y "precio final"
+function cambiarModo() {
+    const modo = document.querySelector('input[name="modo"]:checked').value;
+    document.getElementById('margen').disabled = (modo === 'precio');
+    document.getElementById('precioFinal').disabled = (modo === 'margen');
 
-// Inicializa estado por defecto
-document.getElementById('precioFinal').disabled = true;
+    // Mostrar u ocultar los campos correspondientes
+    document.getElementById('contenedorMargen').style.display = (modo === 'margen') ? "block" : "none";
+    document.getElementById('contenedorPrecio').style.display = (modo === 'precio') ? "block" : "none";
+}
+
+// Inicializa el estado de los inputs
+document.addEventListener("DOMContentLoaded", () => {
+    cambiarModo();
+});
 
 function calcularResultado() {
     const costoNeto = parseFloat(document.getElementById('costoNeto').value);
@@ -26,52 +31,53 @@ function calcularResultado() {
         return;
     }
 
+    // Cálculo de IVA crédito
     const ivaCredito = compraIVA ? costoNeto * tasaIVA : 0;
     const costoTotal = costoNeto + ivaCredito;
-
     let resultadoHTML = `<h3>Resultados Financieros</h3><ul>`;
 
     if (modo === 'margen') {
         const margen = parseFloat(document.getElementById('margen').value);
-        if (!margen || margen <= 0 || margen >=100) {
-            resultadoHTML += '<li>Introduce un margen válido (entre 0 y 100%).</li>';
-        } else {
-            const baseCostoCalculo = ventaIVA ? costoNeto : costoTotal;
-            const precioVentaNeto = baseCalculo / (1 - (margen / 100));
-            const ivaDebito = ventaIVA ? precioVentaNeto * tasaIVA : 0;
-            const precioVentaFinal = precioVentaNeto + ivaDebito;
+        if (!margen || margen <= 0 || margen >= 100) {
+            resultado.innerHTML = "<p>Introduce un margen válido (entre 0 y 100%).</p>";
+            return;
+        }
 
-            resultadoHTML += `
-                <li><strong>Costo Neto:</strong> ${formatoMoneda(costoNeto)}</li>
-                <li><strong>IVA Crédito:</strong> ${formatoMoneda(ivaCredito)}</li>
-                <li><strong>Costo Total:</strong> ${formatoMoneda(costoTotal)}</li>
-                <li><strong>Precio de Venta Neto:</strong> ${formatoMoneda(precioVentaNeto)}</li>
-                ${ventaIVA ? `<li><strong>IVA Débito:</strong> ${formatoMoneda(ivaDebito)}</li>` : ''}
-                <li><strong>Precio de Venta Final:</strong> ${formatoMoneda(precioVentaFinal)}</li>`;
-    } else {
-        const precioFinal = parseFloat(document.getElementById('precioFinal').value);
-        const precioVentaNeto = ventaIVA ? precioFinal / (1 + tasaIVA) : precioFinal;
-        const ivaDebito = ventaIVA ? precioFinal - precioVentaNeto : 0;
-        const baseCalculo = ventaIVA ? costoNeto : costoTotal;
-        const margenObtenido = ((precioVentaNeto - baseCalculo) / precioVentaNeto) * 100;
+        const baseCostoCalculo = ventaIVA ? costoNeto : costoTotal;
+        const precioVentaNeto = baseCostoCalculo / (1 - (margen / 100));
+        const ivaDebito = ventaIVA ? precioVentaNeto * tasaIVA : 0;
+        const precioVentaFinal = precioVentaNeto + ivaDebito;
 
         resultadoHTML += `
             <li><strong>Costo Neto:</strong> ${formatoMoneda(costoNeto)}</li>
             <li><strong>IVA Crédito:</strong> ${formatoMoneda(ivaCredito)}</li>
-            <li><strong>Costo total:</strong> ${formatoMoneda(costoTotal)}</li>
+            <li><strong>Costo Total:</strong> ${formatoMoneda(costoTotal)}</li>
+            <li><strong>Precio de Venta Neto:</strong> ${formatoMoneda(precioVentaNeto)}</li>
+            ${ventaIVA ? `<li><strong>IVA Débito:</strong> ${formatoMoneda(ivaDebito)}</li>` : ''}
+            <li><strong>Precio de Venta Final:</strong> ${formatoMoneda(precioVentaFinal)}</li>
+        `;
+    } else {
+        const precioFinal = parseFloat(document.getElementById('precioFinal').value);
+        if (!precioFinal || precioFinal <= costoTotal) {
+            resultado.innerHTML = "<p>El precio final debe ser mayor al costo total.</p>";
+            return;
+        }
+
+        const precioVentaNeto = ventaIVA ? precioFinal / (1 + tasaIVA) : precioFinal;
+        const ivaDebito = ventaIVA ? precioFinal - precioVentaNeto : 0;
+        const baseCostoCalculo = ventaIVA ? costoNeto : costoTotal;
+        const margenObtenido = ((precioVentaNeto - baseCostoCalculo) / precioVentaNeto) * 100;
+
+        resultadoHTML += `
+            <li><strong>Costo Neto:</strong> ${formatoMoneda(costoNeto)}</li>
+            <li><strong>IVA Crédito:</strong> ${formatoMoneda(ivaCredito)}</li>
+            <li><strong>Costo Total:</strong> ${formatoMoneda(costoTotal)}</li>
             <li><strong>Precio de Venta Neto:</strong> ${formatoMoneda(precioVentaNeto)}</li>
             ${ventaIVA ? `<li><strong>IVA Débito:</strong> ${formatoMoneda(ivaDebito)}</li>` : ''}
             <li><strong>Margen obtenido:</strong> ${margenObtenido.toFixed(2)}%</li>
         `;
     }
 
-    const ivaPagar = ivaDebito - ivaCredito;
-    resultadoHTML += `
-        <li><strong>IVA Crédito:</strong> ${formatoMoneda(ivaCredito)}</li>
-        ${ventaIVA ? `<li><strong>IVA Débito:</strong> ${formatoMoneda(ivaDebito)}</li>` : ''}
-        <li><strong>IVA a Pagar:</strong> ${formatoMoneda(ivaDebito - ivaCredito)}<br>
-            ${ivaDebito - ivaCredito > 0 ? 'Este es el IVA que debes pagar al fisco.' : 'Este valor negativo representa un crédito a tu favor.'}</li>
-    </ul>`;
-
-    document.getElementById('resultado').innerHTML = resultadoHTML;
+    resultadoHTML += `</ul>`;
+    resultado.innerHTML = resultadoHTML;
 }
